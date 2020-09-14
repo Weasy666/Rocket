@@ -235,6 +235,7 @@ Presently, Rocket provides built-in support for the following databases:
 | Sqlite   | [Diesel]              | `1`       | [`diesel::SqliteConnection`]   | `diesel_sqlite_pool`   |
 | Sqlite   | [`Rusqlite`]          | `0.23`    | [`rusqlite::Connection`]       | `sqlite_pool`          |
 | Memcache | [`memcache`]          | `0.14`    | [`memcache::Client`]           | `memcache_pool`        |
+| ArangoDB | [`arangors`]          | `0.4`     | [`arangors::Connection`]       | `arango_pool`          |
 
 [`r2d2`]: https://crates.io/crates/r2d2
 [Diesel]: https://diesel.rs
@@ -250,6 +251,8 @@ Presently, Rocket provides built-in support for the following databases:
 [`diesel::PgConnection`]: http://docs.diesel.rs/diesel/pg/struct.PgConnection.html
 [`memcache`]: https://github.com/aisk/rust-memcache
 [`memcache::Client`]: https://docs.rs/memcache/0.14/memcache/struct.Client.html
+[`arangors`]: https://github.com/fMeow/arangors
+[`arangors::Connection`]: https://docs.rs/arangors/0.4.3/arangors/connection/index.html
 
 ### Usage
 

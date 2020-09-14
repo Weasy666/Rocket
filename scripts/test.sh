@@ -93,6 +93,7 @@ if [ "$1" = "--contrib" ]; then
     mysql_pool
     sqlite_pool
     memcache_pool
+    arango_pool
     brotli_compression
     gzip_compression
   )
