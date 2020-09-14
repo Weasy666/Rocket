@@ -15,6 +15,7 @@ use crate::{Config, Error};
 ///   * `diesel::SqliteConnection`
 ///   * `postgres::Connection`
 ///   * `rusqlite::Connection`
+///   * `arangors::Connection`
 ///
 /// # Implementation Guide
 ///
@@ -243,6 +244,27 @@ impl Poolable for memcache::Client {
     fn pool(db_name: &str, rocket: &Rocket<Build>) -> PoolResult<Self> {
         let config = Config::from(db_name, rocket)?;
         let manager = r2d2_memcache::MemcacheConnectionManager::new(&*config.url);
+        Ok(r2d2::Pool::builder().max_size(config.pool_size).build(manager)?)
+    }
+}
+
+#[cfg(feature = "arango_pool")]
+impl Poolable for arangors::Connection {
+    type Manager = r2d2_arangors::pool::ArangoDBConnectionManager;
+    type Error = std::convert::Infallible;
+
+    fn pool(db_name: &str, rocket: &Rocket<Build>) -> PoolResult<Self> {
+        #[derive(serde::Deserialize, Debug)]
+        struct ArangoConfig {
+            username: String,
+            password: String,
+            #[serde(default)]
+            use_jwt: bool,
+        }
+
+        let config = Config::from(db_name, rocket)?;
+        let extra = rocket.figment().extract_inner::<ArangoConfig>(&format!("databases.{}", db_name))?;
+        let manager = r2d2_arangors::pool::ArangoDBConnectionManager::new(&config.url, &extra.username, &extra.password, extra.use_jwt);
         Ok(r2d2::Pool::builder().max_size(config.pool_size).build(manager)?)
     }
 }

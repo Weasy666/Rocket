@@ -16,6 +16,7 @@ diesel_mysql_pool = ["diesel/mysql", "diesel/r2d2"]
 sqlite_pool = ["rusqlite", "r2d2_sqlite"]
 postgres_pool = ["postgres", "r2d2_postgres"]
 memcache_pool = ["memcache", "r2d2-memcache"]
+arango_pool = ["arangors", "r2d2_arangors"]
 
 [dependencies]
 r2d2 = "0.8"
@@ -32,6 +33,9 @@ r2d2_sqlite = { version = "0.18", optional = true }
 
 memcache = { version = "0.15", optional = true }
 r2d2-memcache = { version = "0.6", optional = true }
+
+arangors = { version = "0.5", default-features = false, features = ["reqwest_blocking", "rocksdb"], optional = true }
+r2d2_arangors = { version = "0.2", optional = true }
 
 [dependencies.rocket_sync_db_pools_codegen]
 version = "0.1.0-rc.1"
