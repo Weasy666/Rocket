@@ -73,8 +73,10 @@ rusqlite = { version = "0.23", optional = true }
 r2d2_sqlite = { version = "0.16", optional = true }
 memcache = { version = "0.14", optional = true }
 r2d2-memcache = { version = "0.5", optional = true }
-arangors = { version = "0.4", default-features = false, features = ["reqwest_blocking", "rocksdb"], optional = true }
-r2d2_arangors = { version = "0.2", optional = true }
+#arangors = { version = "0.4", default-features = false, features = ["reqwest_blocking", "rocksdb"], optional = true }
+arangors = { git = "https://github.com/Weasy666/arangors", branch = "develop", default-features = false, features = ["reqwest_blocking", "rocksdb"], optional = true }
+#r2d2_arangors = { version = "0.2", optional = true }
+r2d2_arangors = { git = "https://github.com/Weasy666/r2d2-arangors", branch = "develop", optional = true }
 
 # SpaceHelmet dependencies
 time = { version = "0.2.9", optional = true }

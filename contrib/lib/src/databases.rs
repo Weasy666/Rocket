@@ -731,9 +731,10 @@ impl Poolable for memcache::Client {
 #[cfg(feature = "arango_pool")]
 impl Poolable for arangors::Connection {
     type Manager = r2d2_arangors::pool::ArangoDBConnectionManager;
-    type Error = std::convert::Infallible;
+    type Error = arangors::ArangoError;
 
     fn pool(db_name: &str, rocket: &rocket::Rocket) -> PoolResult<Self> {
+        println!("pool(db_name: {}, rocket: _): Extracting ArangoConfig", db_name);
         #[derive(Deserialize, Debug)]
         struct ArangoConfig {
             username: String,
@@ -744,7 +745,10 @@ impl Poolable for arangors::Connection {
 
         let config = Config::from(db_name, rocket)?;
         let extra = rocket.figment().extract_inner::<ArangoConfig>(&format!("databases.{}", db_name))?;
+
+        println!("pool(db_name: {}, rocket: _): Creating ArangoDBConnectionManager", db_name);
         let manager = r2d2_arangors::pool::ArangoDBConnectionManager::new(&config.url, &extra.username, &extra.password, extra.use_jwt);
+        println!("pool(db_name: {}, rocket: _): Building r2d2::Pool", db_name);
         Ok(r2d2::Pool::builder().max_size(config.pool_size).build(manager)?)
     }
 }
