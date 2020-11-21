@@ -394,6 +394,9 @@ use self::r2d2::ManageConnection;
 #[cfg(feature = "memcache_pool")] pub extern crate memcache;
 #[cfg(feature = "memcache_pool")] pub extern crate r2d2_memcache;
 
+#[cfg(feature = "sled_pool")] pub extern crate sled;
+#[cfg(feature = "sled_pool")] pub extern crate r2d2_sled;
+
 /// A base `Config` for any `Poolable` type.
 ///
 /// For the following configuration:
@@ -696,6 +699,18 @@ impl Poolable for memcache::Client {
     fn pool(db_name: &str, rocket: &rocket::Rocket) -> PoolResult<Self> {
         let config = Config::from(db_name, rocket)?;
         let manager = r2d2_memcache::MemcacheConnectionManager::new(&*config.url);
+        Ok(r2d2::Pool::builder().max_size(config.pool_size).build(manager)?)
+    }
+}
+
+#[cfg(feature = "sled_pool")]
+impl Poolable for sled::Db {
+    type Manager = r2d2_sled::SledConnectionManager;
+    type Error = std::convert::Infallible;
+
+    fn pool(db_name: &str, rocket: &rocket::Rocket) -> PoolResult<Self> {
+        let config = Config::from(db_name, rocket)?;
+        let manager = r2d2_sled::SledConnectionManager::file(&*config.url);
         Ok(r2d2::Pool::builder().max_size(config.pool_size).build(manager)?)
     }
 }

@@ -39,6 +39,7 @@ postgres_pool = ["databases", "postgres", "r2d2_postgres"]
 mysql_pool = ["databases", "mysql", "r2d2_mysql"]
 sqlite_pool = ["databases", "rusqlite", "r2d2_sqlite"]
 memcache_pool = ["databases", "memcache", "r2d2-memcache"]
+sled_pool = ["databases", "sled", "r2d2_sled"]
 
 [dependencies]
 # Global dependencies.
@@ -72,6 +73,8 @@ rusqlite = { version = "0.23", optional = true }
 r2d2_sqlite = { version = "0.16", optional = true }
 memcache = { version = "0.14", optional = true }
 r2d2-memcache = { version = "0.5", optional = true }
+sled = { version = "0.34", optional = true }
+r2d2_sled = { git = "https://github.com/Weasy666/r2d2-sled", optional = true }
 
 # SpaceHelmet dependencies
 time = { version = "0.2.9", optional = true }
